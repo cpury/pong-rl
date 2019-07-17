@@ -5,7 +5,7 @@ async function sleep(ms) {
 }
 
 $(document).ready(async () => {
-  while (true) {
+  for (;;) {
     const match = new Match();
     await match.start();
     await sleep(500);
