@@ -2,11 +2,58 @@
 @import url('https://fonts.googleapis.com/css?family=Play:400,700');
 
 // TODO Set your brand colors
+$black: #3a3c3f;
+$white: #e5e5e6;
+$blue: #2ec0f9;
+$red: #f06543;
+$yellow: #e7e247;
+$green: #c5d86d;
 
-// Update Bulma's global variables
+$grey-darker: mix($white, $black, 21%);
+$grey-dark: mix($white, $black, 29%);
+$grey: mix($white, $black, 48%);
+$grey-light: mix($white, $black, 71%);
+$grey-lighter: mix($white, $black, 86%);
+
+// Update Bulma's variables
 $family-sans-serif: 'Play', sans-serif;
-
-$bigphone: 576px;
+$primary: $red;
+$background: $black;
+$text: $white;
+$info: $blue;
+$link: $red;
+$link-hover: darken($red, 10%);
+$link-focus: darken($red, 10%);
+$link-active: darken($red, 10%);
+$title-color: $white;
+$title-weight: 400;
 
 // Import the rest of Bulma
 @import '../../node_modules/bulma/bulma.sass';
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: $black;
+  margin: 0;
+  padding: 0;
+  color: $white;
+  overflow: hidden;
+  font-size: 24pt;
+}
+
+#title {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+#footer {
+  font-size: 20pt;
+  color: $grey-lighter;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
