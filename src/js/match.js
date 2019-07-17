@@ -10,6 +10,9 @@ class Match {
       // Only redraw every couple frames to improve performance
       drawFrequency: 2, // Every second update -> 25 FPS
 
+      // Ask controllers every X frames for an updated action:
+      controllerFrameInterval: 5, // 50 FPS / 5 = 10 times per second
+
       // How fast the paddles and the ball can move
       paddleSpeed: 1,
       ballSpeed: 0.8,
@@ -179,12 +182,27 @@ class Match {
     this.previousState = this.currentState;
     this.currentState = this.getState();
 
-    // Check if match ended last frame:
-    const winner = this.previousState && this.previousState.winner;
+    // Check if match ended:
+    const winner = this.currentState.winner;
     if (winner) {
       this.winner = winner;
     } else {
-      // TODO Ask for input based on current state
+      // Ask controllers for action based on current state.
+      // Either every few frames or if there's a winner (to give them a chance to register the win)
+      let leftAction = this.leftPaddle.lastAction || 0;
+      let rightAction = this.rightPaddle.lastAction || 0;
+
+      if (this.currentState.winner || this.currentFrame % this.controllerFrameInterval === 0) {
+        if (this.leftController) leftAction = this.leftController.selectAction(this.currentState);
+        if (this.rightController)
+          rightAction = this.rightController.selectAction(this.currentState);
+      }
+
+      this.leftPaddle.forceY = leftAction * this.paddleSpeed;
+      this.rightPaddle.forceY = rightAction * this.paddleSpeed;
+
+      this.leftPaddle.lastAction = leftAction;
+      this.rightPaddle.lastAction = rightAction;
     }
 
     // Update each object:
