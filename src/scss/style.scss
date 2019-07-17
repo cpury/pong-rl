@@ -63,3 +63,12 @@ body {
   border-radius: 5px;
   padding: 5px;
 }
+
+.game.section {
+  padding: 1rem 0.5rem;
+
+  @media (min-width: $tablet) {
+    padding: 3rem 1.5rem;
+    margin-top: 15vh;
+  }
+}
