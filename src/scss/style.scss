@@ -57,3 +57,9 @@ body {
   width: 100%;
   text-align: center;
 }
+
+#gameCanvas {
+  border: 1px $white solid;
+  border-radius: 5px;
+  padding: 5px;
+}
