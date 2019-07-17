@@ -1,0 +1,12 @@
+// Import a Google Font
+@import url('https://fonts.googleapis.com/css?family=Play:400,700');
+
+// TODO Set your brand colors
+
+// Update Bulma's global variables
+$family-sans-serif: 'Play', sans-serif;
+
+$bigphone: 576px;
+
+// Import the rest of Bulma
+@import '../../node_modules/bulma/bulma.sass';
