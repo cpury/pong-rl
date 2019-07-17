@@ -28,6 +28,7 @@
   },
   "globals": {
     "ga": "readonly",
-    "tf": "readonly"
+    "tf": "readonly",
+    "Match": "readonly"
   }
 }
