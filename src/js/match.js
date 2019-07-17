@@ -183,10 +183,9 @@ class Match {
     const winner = this.previousState && this.previousState.winner;
     if (winner) {
       this.winner = winner;
-      this.stop();
+    } else {
+      // TODO Ask for input based on current state
     }
-
-    // TODO Ask for input based on current state
 
     // Update each object:
     this.moveObject(this.leftPaddle, this.timeFactor);
@@ -218,16 +217,26 @@ class Match {
   updateAndDraw() {
     // Call periodically. Will update the state and draw every few frames
     this.update();
-    if (this.currentFrame % this.drawFrequency === 0) this.draw();
+    if (this.currentFrame % this.drawFrequency === 0 || this.winner) this.draw();
   }
 
   start() {
-    // Start or continue the game
-    this.updateInterval = setInterval(this.updateAndDraw.bind(this), this.updateFrequency);
-  }
+    // Start or continue the game. Returns a promise that resolves
+    return new Promise((resolve, reject) => {
+      const updateInterval = setInterval(() => {
+        let error = null;
 
-  stop() {
-    // Stop or pause the game
-    clearInterval(this.updateInterval);
+        try {
+          this.updateAndDraw();
+        } catch (e) {
+          error = e;
+          console.error(error);
+        }
+        if (error || this.winner) {
+          clearInterval(updateInterval);
+          resolve(this.winner);
+        }
+      }, this.updateFrequency);
+    });
   }
 }
