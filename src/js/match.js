@@ -2,8 +2,7 @@
 class Match {
   constructor(options) {
     options = {
-      paddleHeight: 60,
-      ballSize: 12,
+      paddleHeight: 0.25,
       canvasId: 'gameCanvas',
 
       // How often the game should be updated / redrawn
@@ -30,26 +29,26 @@ class Match {
 
     // Keep track of the ball and two paddles.
     this.leftPaddle = {
-      x: 0.025,
+      x: 0.02,
       y: 0.5,
       height: this.paddleHeight,
-      width: 12,
+      width: 0.0375,
       forceY: 0,
       previousAction: null,
     };
     this.rightPaddle = {
-      x: 0.975,
+      x: 0.98,
       y: 0.5,
       height: this.paddleHeight,
-      width: 12,
+      width: 0.0375,
       forceY: 0,
       previousAction: null,
     };
     this.ball = {
       x: 0.5,
       y: 0.5,
-      height: this.ballSize,
-      width: this.ballSize,
+      height: 0.05,
+      width: 0.0375,
       forceX: 0,
       forceY: 0,
     };
@@ -97,10 +96,10 @@ class Match {
     const paddle = leftOrRight === 'left' ? this.leftPaddle : this.rightPaddle;
     const ball = this.ball;
 
-    const paddleWidth = paddle.width / this.canvas.width;
-    const paddleHeight = (paddle.height / this.canvas.height) * 1.2;
-    const ballWidth = ball.width / this.canvas.width;
-    const ballHeight = ball.height / this.canvas.height;
+    const paddleWidth = paddle.width;
+    const paddleHeight = paddle.height * 1.1;
+    const ballWidth = ball.width;
+    const ballHeight = ball.height;
 
     // First, check on the x dimension if a collision is possible:
     if (leftOrRight === 'left' && ball.x - ballWidth / 2 > paddle.x + paddleWidth / 2) {
@@ -151,7 +150,7 @@ class Match {
     if (obj.forceY) {
       obj.y += obj.forceY * timeFactor;
 
-      const radiusY = obj.height / 2 / this.canvas.height;
+      const radiusY = obj.height / 2;
 
       // When hitting a wall, a paddle stops, a ball bounces back:
       if (!isBall) {
@@ -164,8 +163,8 @@ class Match {
 
   getWinner() {
     // Checks if one side one won and returns 'left' or 'right' if so.
-    const ballWidth = this.ball.width / 2 / this.canvas.width;
-    const paddleWidth = this.leftPaddle.width / 2 / this.canvas.width;
+    const ballWidth = this.ball.width / 2;
+    const paddleWidth = this.leftPaddle.width / 2;
 
     if (this.ball.x - ballWidth < this.leftPaddle.x - paddleWidth) {
       return 'right';
@@ -199,9 +198,11 @@ class Match {
 
   drawObject(obj) {
     // Given an object with coordinates and size, draw it to the canvas
-    const x = obj.x * this.canvas.width - obj.width / 2;
-    const y = obj.y * this.canvas.height - obj.height / 2;
-    this.ctx.fillRect(x, y, obj.width, obj.height);
+    const width = obj.width * this.canvas.width;
+    const height = obj.height * this.canvas.height;
+    const x = obj.x * this.canvas.width - width / 2;
+    const y = obj.y * this.canvas.height - height / 2;
+    this.ctx.fillRect(x, y, width, height);
   }
 
   draw() {
