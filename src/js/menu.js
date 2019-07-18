@@ -14,7 +14,52 @@ window.Menu = {
       );
     });
     $('.player.select').removeClass('is-loading');
+    $('#playButton').removeClass('is-loading');
 
-    // TODO Listen to selfplay dropdown and enable / disable player b
+    // Listen to selfplay dropdown and enable / disable player b
+    this.$selfPlay.change(event => {
+      if (event.currentTarget.value === 'Yes') {
+        // Disable playerB and set to same controller type:
+        this.$playerB.val(this.$playerA.val());
+        this.$playerB.attr('disabled', 'disabled');
+      } else {
+        // Enable select again
+        this.$playerB.removeAttr('disabled');
+      }
+    });
+  },
+
+  // Returns the controller class selected for player a.
+  getPlayerA() {
+    const selected = this.$playerA.find(':selected').text();
+    return window.controllers[selected];
+  },
+
+  // Returns the controller class selected for player b, or undefined if self-play.
+  getPlayerB() {
+    const isSelfPlay = this.$selfPlay.find(':selected').text() === 'Yes';
+
+    if (!isSelfPlay) {
+      const selected = this.$playerB.find(':selected').text();
+      return window.controllers[selected];
+    }
+  },
+
+  // Shows the menu until the play button is pressed, then returns an object describing the
+  // selected options:
+  async run() {
+    return new Promise(resolve => {
+      // TODO Show menu
+
+      // Listen to click on play button:
+      $('#playButton').click(event => {
+        // TODO Hide menu
+
+        resolve({
+          leftControllerClass: this.getPlayerA(),
+          rightControllerClass: this.getPlayerB(),
+        });
+      });
+    });
   },
 };

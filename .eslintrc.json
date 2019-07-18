@@ -32,6 +32,7 @@
   "globals": {
     "ga": "readonly",
     "tf": "readonly",
+    "Menu": "readonly",
     "Match": "readonly",
     "BaseController": "readonly",
     "DumbController": "readonly"

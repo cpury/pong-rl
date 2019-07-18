@@ -27,6 +27,7 @@ $link-focus: darken($red, 10%);
 $link-active: darken($red, 10%);
 $title-color: $white;
 $title-weight: 400;
+$input-hover-color: darken($red, 10%);
 
 // Import the rest of Bulma
 @import '../../node_modules/bulma/bulma.sass';

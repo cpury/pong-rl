@@ -28,40 +28,53 @@
 
   <section class="section" id="menu">
     <div class="container">
-      <div class="columns is-gapless is-vcentered">
-        <div class="column is-one-third">
-          Player A:
-        </div>
-        <div class="column has-text-right">
-          <div class="player select is-loading is-medium">
-            <select id="playerADropdown">
-              {{!-- Will be filled via JS --}}
-            </select>
+      <div class="field">
+        <div class="columns is-gapless is-vcentered">
+          <div class="column is-one-third">
+            Player A:
+          </div>
+          <div class="column control has-text-right">
+            <div class="player select is-loading is-medium">
+              <select id="playerADropdown">
+                {{!-- Will be filled via JS --}}
+              </select>
+            </div>
           </div>
         </div>
       </div>
-      <div class="columns is-gapless is-vcentered">
-        <div class="column is-one-third">
-          Self-play:
-        </div>
-        <div class="column has-text-right">
-          <div class="select is-medium">
-            <select id="selfPlayDropdown">
-              <option>No</option>
-              <option>Yes</option>
-            </select>
+      <div class="field">
+        <div class="columns is-gapless is-vcentered">
+          <div class="column is-one-third">
+            Self-play:
+          </div>
+          <div class="column control has-text-right">
+            <div class="select is-medium">
+              <select id="selfPlayDropdown">
+                <option>No</option>
+                <option>Yes</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
-      <div class="columns is-gapless is-vcentered">
-        <div class="column is-one-third">
-          Player B:
+      <div class="field">
+        <div class="columns is-gapless is-vcentered">
+          <div class="column is-one-third">
+            Player B:
+          </div>
+          <div class="column control has-text-right">
+            <div class="player select is-loading is-medium">
+              <select id="playerBDropdown">
+                {{!-- Will be filled via JS --}}
+              </select>
+            </div>
+          </div>
         </div>
-        <div class="column has-text-right">
-          <div class="player select is-loading is-medium">
-            <select id="playerBDropdown">
-              {{!-- Will be filled via JS --}}
-            </select>
+      </div>
+      <div class="field">
+        <div class="columns is-gapless is-vcentered">
+          <div class="column has-text-centered">
+            <button id="playButton" class="button is-primary is-large is-loading">Play</button>
           </div>
         </div>
       </div>
