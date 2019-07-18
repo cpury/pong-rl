@@ -258,7 +258,9 @@ class Match {
           clearInterval(updateInterval);
           this.leftController && this.leftController.onMatchEnd(this.winner === 'left');
           this.rightController && this.rightController.onMatchEnd(this.winner === 'right');
-          resolve(this.winner);
+
+          if (error) reject(error);
+          else resolve(this.winner);
         }
       }, this.updateFrequency);
     });
