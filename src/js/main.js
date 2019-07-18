@@ -6,8 +6,9 @@ async function sleep(ms) {
 }
 
 $(document).ready(async () => {
-  let leftController = new DumbController('left');
-  let rightController = new DumbController('right');
+  const leftController = new DumbController('left');
+  const rightController = leftController.mirrorController();
+
   for (;;) {
     const match = new Match({ leftController, rightController });
     await match.run();
