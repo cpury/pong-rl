@@ -85,3 +85,14 @@ body {
     padding: 3rem;
   }
 }
+
+.animated.section {
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s all ease;
+
+  &.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+}

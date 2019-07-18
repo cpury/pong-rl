@@ -8,11 +8,13 @@ async function sleep(ms) {
 $(document).ready(async () => {
   window.Menu.init();
 
-  const leftController = new DumbController('left');
-  const rightController = leftController.mirrorController();
+  const matchOptions = await window.Menu.run();
+  await sleep(500);
+  $('#menu').remove();
+  $('#game').addClass('active');
 
   for (;;) {
-    const match = new Match({ leftController, rightController });
+    const match = new Match(matchOptions);
     await match.run();
     await sleep(500);
   }

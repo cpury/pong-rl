@@ -49,16 +49,23 @@ window.Menu = {
   // selected options:
   async run() {
     return new Promise(resolve => {
-      // TODO Show menu
+      $('#menu').addClass('active');
 
       // Listen to click on play button:
       $('#playButton').click(event => {
-        // TODO Hide menu
+        $('#menu').removeClass('active');
 
-        resolve({
-          leftControllerClass: this.getPlayerA(),
-          rightControllerClass: this.getPlayerB(),
-        });
+        const leftControllerClass = this.getPlayerA();
+        const rightControllerClass = this.getPlayerB();
+
+        const matchOptions = {
+          leftController: new leftControllerClass(),
+        };
+
+        if (rightControllerClass) matchOptions.rightController = new rightControllerClass();
+        else matchOptions.rightController = matchOptions.leftController.mirrorController();
+
+        resolve(matchOptions);
       });
     });
   },
