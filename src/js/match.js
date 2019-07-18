@@ -57,8 +57,8 @@ class Match {
     };
 
     // Start the ball in a random direction.
-    const forceX = 0.3 + Math.random() * 0.25;
-    const forceY = 1.1 + Math.random() * 0.25;
+    const forceX = 0.5 + Math.random() * 0.25;
+    const forceY = 0.9 + Math.random() * 0.25;
     this.ball.forceX = (Math.random() > 0.5 ? 1 : -1) * forceX * this.ballSpeed;
     this.ball.forceY = (Math.random() > 0.5 ? 1 : -1) * forceY * this.ballSpeed;
 

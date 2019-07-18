@@ -45,8 +45,8 @@ window.Menu = {
     }
   },
 
-  // Shows the menu until the play button is pressed, then returns an object describing the
-  // selected options:
+  // Shows the menu until the play button is pressed, then returns a matchOptions
+  // object based on the user's choices.
   async run() {
     return new Promise(resolve => {
       $('#menu').addClass('active');
