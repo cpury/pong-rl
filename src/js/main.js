@@ -7,8 +7,8 @@ async function sleep(ms) {
 
 $(document).ready(async () => {
   window.Menu.init();
-
   const matchOptions = await window.Menu.run();
+
   await sleep(500);
   $('#menu').remove();
   $('#game').addClass('active');

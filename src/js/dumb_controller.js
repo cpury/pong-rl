@@ -13,6 +13,7 @@ class DumbController extends BaseController {
     this.frame = 0;
   }
 
+  // Select action given state. Simply follows the ball with some hiccups.
   async selectAction(state) {
     // Only change your action every couple frames:
     if (++this.frame % this.reactionTime !== 0) {

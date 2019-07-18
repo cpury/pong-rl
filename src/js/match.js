@@ -71,8 +71,8 @@ class Match {
     this.draw();
   }
 
+  // Return the current state of the game.
   getState() {
-    // Return the state of the game.
     return {
       ball: {
         x: this.ball.x,
@@ -93,9 +93,9 @@ class Match {
     };
   }
 
+  // Check if the given side's paddle is colliding with the ball.
+  // Pass 'left' or 'right' (since the logic is slightly different)
   checkCollision(leftOrRight) {
-    // Check if the given side's paddle is colliding with the ball.
-    // Pass 'left' or 'right' (since the logic is slightly different)
     const paddle = leftOrRight === 'left' ? this.leftPaddle : this.rightPaddle;
     const ball = this.ball;
 
@@ -137,9 +137,9 @@ class Match {
     return true;
   }
 
+  // Move the given object by its force, checking for collisions and potentially
+  // updating the force values.
   moveObject(obj, timeFactor, isBall) {
-    // Move the given object by its force, checking for collisions and potentially
-    // updating the force values.
     if (obj.forceX) {
       obj.x += obj.forceX * timeFactor;
 
@@ -164,8 +164,8 @@ class Match {
     }
   }
 
+  // Checks if one side one won and returns 'left' or 'right' if so.
   getWinner() {
-    // Checks if one side one won and returns 'left' or 'right' if so.
     const ballWidth = this.ball.width / 2;
     const paddleWidth = this.leftPaddle.width / 2;
 
@@ -177,8 +177,8 @@ class Match {
     }
   }
 
+  // Moves objects, checks for collisions, etc.
   async update() {
-    // Moves objects, checks for collisions, etc.
     this.previousState = this.currentState;
     this.currentState = this.getState();
 
@@ -214,8 +214,8 @@ class Match {
     this.currentFrame += 1;
   }
 
+  // Given an object with coordinates and size, draw it to the canvas
   drawObject(obj) {
-    // Given an object with coordinates and size, draw it to the canvas
     const width = obj.width * this.canvas.width;
     const height = obj.height * this.canvas.height;
     const x = obj.x * this.canvas.width - width / 2;
@@ -223,8 +223,8 @@ class Match {
     this.ctx.fillRect(x, y, width, height);
   }
 
+  // Redraw the game based on the current state
   draw() {
-    // Redraw the game based on the current state
     this.ctx.fillStyle = '#e5e5e6';
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -233,14 +233,14 @@ class Match {
     this.drawObject(this.rightPaddle);
   }
 
+  // Call periodically. Will update the state and draw every few frames
   async updateAndDraw() {
-    // Call periodically. Will update the state and draw every few frames
     await this.update();
     if (this.currentFrame % this.drawFrequency === 0 || this.winner) this.draw();
   }
 
+  // Starts the game and runs until completion.
   async run() {
-    // Starts the game and runs until completion.
     return new Promise((resolve, reject) => {
       this.leftController && this.leftController.onMatchStart();
       this.rightController && this.rightController.onMatchStart();
