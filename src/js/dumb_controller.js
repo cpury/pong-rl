@@ -30,3 +30,5 @@ class DumbController extends BaseController {
     return this.currentAction;
   }
 }
+
+window.DumbController = DumbController;

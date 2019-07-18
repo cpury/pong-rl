@@ -238,9 +238,12 @@ class Match {
     if (this.currentFrame % this.drawFrequency === 0 || this.winner) this.draw();
   }
 
-  start() {
-    // Start or continue the game. Returns a promise that resolves
+  async run() {
+    // Starts the game and runs until completion.
     return new Promise((resolve, reject) => {
+      this.leftController && this.leftController.onMatchStart();
+      this.rightController && this.rightController.onMatchStart();
+
       const updateInterval = setInterval(() => {
         let error = null;
 
@@ -252,6 +255,8 @@ class Match {
         }
         if (error || this.winner) {
           clearInterval(updateInterval);
+          this.leftController && this.leftController.onMatchEnd(this.winner === 'left');
+          this.rightController && this.rightController.onMatchEnd(this.winner === 'right');
           resolve(this.winner);
         }
       }, this.updateFrequency);
