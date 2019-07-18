@@ -13,7 +13,7 @@ class DumbController extends BaseController {
     this.frame = 0;
   }
 
-  selectAction(state) {
+  async selectAction(state) {
     // Only change your action every couple frames:
     if (++this.frame % this.reactionTime !== 0) {
       return this.currentAction;

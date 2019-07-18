@@ -7,15 +7,15 @@ class BaseController {
   }
 
   // eslint-disable-next-line no-unused-vars
-  selectAction(state) {
+  async selectAction(state) {
     // Given the current game state, should return
     // 1 (down), -1 (up) or 0 (nothing)
   }
 
-  onMatchStart() {}
+  async onMatchStart() {}
 
   // eslint-disable-next-line no-unused-vars
-  onMatchEnd(won) {
+  async onMatchEnd(won) {
     // Called when the match ends. Won is whether this player won or not.
   }
 }

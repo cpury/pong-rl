@@ -177,7 +177,7 @@ class Match {
     }
   }
 
-  update() {
+  async update() {
     // Moves objects, checks for collisions, etc.
     this.previousState = this.currentState;
     this.currentState = this.getState();
@@ -193,9 +193,10 @@ class Match {
       let rightAction = this.rightPaddle.lastAction || 0;
 
       if (this.currentState.winner || this.currentFrame % this.controllerFrameInterval === 0) {
-        if (this.leftController) leftAction = this.leftController.selectAction(this.currentState);
+        if (this.leftController)
+          leftAction = await this.leftController.selectAction(this.currentState);
         if (this.rightController)
-          rightAction = this.rightController.selectAction(this.currentState);
+          rightAction = await this.rightController.selectAction(this.currentState);
       }
 
       this.leftPaddle.forceY = leftAction * this.paddleSpeed;
@@ -232,9 +233,9 @@ class Match {
     this.drawObject(this.rightPaddle);
   }
 
-  updateAndDraw() {
+  async updateAndDraw() {
     // Call periodically. Will update the state and draw every few frames
-    this.update();
+    await this.update();
     if (this.currentFrame % this.drawFrequency === 0 || this.winner) this.draw();
   }
 

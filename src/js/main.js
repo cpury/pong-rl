@@ -10,7 +10,7 @@ $(document).ready(async () => {
   let rightController = new DumbController('right');
   for (;;) {
     const match = new Match({ leftController, rightController });
-    await match.start();
+    await match.run();
     await sleep(500);
   }
 });
