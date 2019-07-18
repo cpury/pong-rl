@@ -31,4 +31,5 @@ class DumbController extends BaseController {
   }
 }
 
-window.DumbController = DumbController;
+window.controllers = window.controllers || [];
+window.controllers.push(DumbController);

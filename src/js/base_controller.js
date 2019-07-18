@@ -1,5 +1,6 @@
 // Defines an abstract base controller
 
+// eslint-disable-next-line no-unused-vars
 class BaseController {
   constructor(leftOrRight, options) {
     this.leftOrRight = leftOrRight;
@@ -19,5 +20,3 @@ class BaseController {
     // Called when the match ends. Won is whether this player won or not.
   }
 }
-
-window.BaseController = BaseController;
