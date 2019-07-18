@@ -10,8 +10,6 @@
 
   <link href="https://fonts.googleapis.com/css?family=Play:400,700" rel="stylesheet">
 
-  <link href="https://cdn.jsdelivr.net/npm/epoch-charting@0.8.4/dist/css/epoch.min.css" rel="stylesheet">
-
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -28,12 +26,38 @@
     <h1 class="title is-3">PONG RL</h1>
   </div>
 
-  <section class="game section">
+  <section class="section" id="menu">
+    <div class="container">
+      <div class="columns is-gapless is-vcentered">
+        <div class="column is-one-third">
+          Player A:
+        </div>
+        <div class="column has-text-right">
+          <div class="player select is-loading is-medium">
+            <select id="playerADropdown">
+              {{!-- Will be filled via JS --}}
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="columns is-gapless is-vcentered">
+        <div class="column is-one-third">
+          Player B:
+        </div>
+        <div class="column has-text-right">
+          <div class="player select is-loading is-medium">
+            <select id="playerBDropdown">
+              {{!-- Will be filled via JS --}}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="game">
     <div class="container">
       <div class="columns">
-        <div class="column">
-          Stats
-        </div>
         <div class="column has-text-centered">
           <canvas id="gameCanvas" width="240" height="180"></canvas>
         </div>

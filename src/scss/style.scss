@@ -40,7 +40,6 @@ body {
   padding: 0;
   color: $white;
   overflow: hidden;
-  font-size: 24pt;
 }
 
 #title {
@@ -64,11 +63,24 @@ body {
   padding: 5px;
 }
 
-.game.section {
+.section {
   padding: 1rem 0.5rem;
 
   @media (min-width: $tablet) {
     padding: 3rem 1.5rem;
-    margin-top: 15vh;
+  }
+}
+
+.container {
+  max-width: 640px;
+}
+
+#menu.section {
+  font-size: 18pt;
+  padding: 1rem;
+
+  @media (min-width: $tablet) {
+    font-size: 20pt;
+    padding: 3rem;
   }
 }
