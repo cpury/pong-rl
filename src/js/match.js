@@ -1,5 +1,5 @@
 // Represents a single match. Updates and keeps the game state. Draws to a canvas.
-class Match {
+export default class Match {
   constructor(options) {
     options = {
       paddleHeight: 0.25,

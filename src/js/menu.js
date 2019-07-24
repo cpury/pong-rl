@@ -1,11 +1,13 @@
-window.Menu = {
-  init() {
+export default {
+  // Pass a dictionary of controller classes that can be selected
+  init(controllers) {
     this.$playerA = $('#playerADropdown');
     this.$playerB = $('#playerBDropdown');
     this.$selfPlay = $('#selfPlayDropdown');
+    this.controllers = controllers;
 
     // Load player menu entries:
-    Object.keys(window.controllers).forEach((controller, i) => {
+    Object.keys(this.controllers).forEach((controller, i) => {
       $('.player.select select').append(
         $('<option>', {
           value: i,
@@ -32,7 +34,7 @@ window.Menu = {
   // Returns the controller class selected for player a.
   getPlayerA() {
     const selected = this.$playerA.find(':selected').text();
-    return window.controllers[selected];
+    return this.controllers[selected];
   },
 
   // Returns the controller class selected for player b, or undefined if self-play.
@@ -41,7 +43,7 @@ window.Menu = {
 
     if (!isSelfPlay) {
       const selected = this.$playerB.find(':selected').text();
-      return window.controllers[selected];
+      return this.controllers[selected];
     }
   },
 

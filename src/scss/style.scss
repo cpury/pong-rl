@@ -30,7 +30,7 @@ $title-weight: 400;
 $input-hover-color: darken($red, 10%);
 
 // Import the rest of Bulma
-@import '../../node_modules/bulma/bulma.sass';
+@import 'node_modules/bulma/bulma.sass';
 
 html,
 body {

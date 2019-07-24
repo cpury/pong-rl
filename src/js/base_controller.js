@@ -1,7 +1,7 @@
 // Defines an abstract base controller
 
 // eslint-disable-next-line no-unused-vars
-class BaseController {
+export default class BaseController {
   constructor(leftOrRight, options) {
     this.leftOrRight = leftOrRight;
     this.options = options;

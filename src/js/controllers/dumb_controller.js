@@ -1,6 +1,8 @@
 // Defines a controller that simply follows the ball on the y axis with some mistakes
 
-class DumbController extends BaseController {
+import BaseController from '../base_controller.js';
+
+export default class DumbController extends BaseController {
   constructor(leftOrRight, options) {
     options = {
       reactionTime: 4,
@@ -31,6 +33,3 @@ class DumbController extends BaseController {
     return this.currentAction;
   }
 }
-
-window.controllers = window.controllers || {};
-window.controllers.DumbController = DumbController;
