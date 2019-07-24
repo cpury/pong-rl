@@ -6,7 +6,8 @@
   "dependencies": {
     "@babel/runtime-corejs2": "^7.5.5",
     "@tensorflow/tfjs": "^1.2.5",
-    "bulma": "^0.7.5"
+    "bulma": "^0.7.5",
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
