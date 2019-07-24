@@ -1,12 +1,13 @@
 {
   "plugins": ["prettier"],
-  "extends": ["eslint:recommended", "prettier"],
+  "extends": ["eslint:recommended", "plugin:prettier/recommended"],
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2018,
     "ecmaFeatures": {
       "jsx": true,
       "experimentalObjectRestSpread": true
-    }
+    },
+    "sourceType": "module"
   },
   "rules": {
     "prettier/prettier": [
@@ -24,17 +25,9 @@
     }]
   },
   "env": {
-    "node": true,
     "es6": true,
     "browser": true,
     "jquery": true
   },
-  "globals": {
-    "ga": "readonly",
-    "tf": "readonly",
-    "Menu": "readonly",
-    "Match": "readonly",
-    "BaseController": "readonly",
-    "DumbController": "readonly"
-  }
+  "globals": {}
 }
