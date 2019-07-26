@@ -61,10 +61,10 @@ export default {
         const rightControllerClass = this.getPlayerB();
 
         const matchOptions = {
-          leftController: new leftControllerClass(),
+          leftController: new leftControllerClass('left'),
         };
 
-        if (rightControllerClass) matchOptions.rightController = new rightControllerClass();
+        if (rightControllerClass) matchOptions.rightController = new rightControllerClass('right');
         else matchOptions.rightController = matchOptions.leftController.mirrorController();
 
         resolve(matchOptions);

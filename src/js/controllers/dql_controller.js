@@ -89,26 +89,28 @@ export default class DQLController extends BaseController {
     const expectedStateActionValues = Array(transitions.length);
 
     // Fill "neutral" values with previous estimates:
-    const stateExpectationPromise = tf.tidy(() => {
+    const stateExpectationsTensor = tf.tidy(() => {
       const states = tf.tensor(transitions.map(t => this.stateToArray(t.state, t.side)));
-      let stateExpectations = this.dqn.predict(states);
+      let stateExpectations = this.model.predict(states);
       stateExpectations = tf.sub(stateExpectations, tf.mean(stateExpectations));
-      return stateExpectations.array();
+      return stateExpectations;
     });
 
     // Estimate Q values for resulting states:
-    const newStateExpectationPromise = tf.tidy(() => {
+    const newStateExpectationsTensor = tf.tidy(() => {
       const newStates = tf.tensor(transitions.map(t => this.stateToArray(t.newState, t.side)));
-      let newStateExpectations = this.dqn.predict(newStates);
+      let newStateExpectations = this.model.predict(newStates);
       newStateExpectations = tf.sub(newStateExpectations, tf.mean(newStateExpectations));
-      return newStateExpectations.array();
+      return newStateExpectations;
     });
 
     // Wait for the computations to be done:
     const [stateExpectations, newStateExpectations] = await Promise.all([
-      stateExpectationPromise,
-      newStateExpectationPromise,
+      stateExpectationsTensor.array(),
+      newStateExpectationsTensor.array(),
     ]);
+
+    tf.dispose([stateExpectationsTensor, newStateExpectationsTensor]);
 
     for (let i = 0; i < transitions.length; i++) {
       const transition = transitions[i];
@@ -132,14 +134,16 @@ export default class DQLController extends BaseController {
   async selectAction(state) {
     const reward = this.getReward(state);
 
-    // Remember this transition so we can learn from it:
-    this.replayMemory.push(
-      this.leftOrRight,
-      this.previousState,
-      this.previousAction,
-      state,
-      reward,
-    );
+    if (this.previousState) {
+      // Remember this transition so we can learn from it:
+      this.replayMemory.push(
+        this.leftOrRight,
+        this.previousState,
+        this.previousAction,
+        state,
+        reward,
+      );
+    }
 
     // Let the model pick the next action
     const action = await this.model.sampleAction(this.stateToArray(state), 1);
