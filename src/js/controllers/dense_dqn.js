@@ -50,7 +50,6 @@ export default class DenseDQN {
     this.model.compile({ loss: tf.losses.huberLoss, optimizer: tf.train.adam(this.lr) });
 
     this.loss = null;
-    this.valLoss = null;
   }
 
   // Train the model with the given tensors
@@ -62,7 +61,6 @@ export default class DenseDQN {
       callbacks: {
         onEpochEnd: async (epoch, logs) => {
           this.loss = logs.loss;
-          this.valLoss = logs.val_loss;
         },
       },
       ...(options || {}),

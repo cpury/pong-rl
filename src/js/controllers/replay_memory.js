@@ -10,13 +10,16 @@ export default class ReplayMemory {
     };
     Object.assign(this, options);
 
-    this.memory = Array(this.capacity);
+    this.memory = [];
     this.position = 0;
   }
 
   // Store a transition from a state via an action to another state and a reward.
   push(side, state, action, newState, reward) {
-    // Stores a transition
+    if (this.memory.length < this.capacity) {
+      this.memory.push(undefined);
+    }
+
     this.memory[this.position] = {
       side,
       state,
