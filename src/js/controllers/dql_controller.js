@@ -206,6 +206,7 @@ export default class DQLController extends BaseController {
     this.previousAction = null;
 
     // Train model a few times since the default values get updated in each step
+    this.model.setLearningRate(this.lr);
     for (let i = 0; i < this.trainingIterations; i++) await this.trainModel();
 
     // Decay learning and exploration rates:
