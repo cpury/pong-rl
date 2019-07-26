@@ -6,12 +6,9 @@ export default class Match {
       canvasId: 'gameCanvas',
 
       // How often the game should be updated / redrawn
-      updateFrequency: 20, // = 50 FPS
-      // Only redraw every couple frames to improve performance
-      drawFrequency: 2, // Every second update -> 25 FPS
-
+      updateFrequency: 40, // = 25 FPS
       // Ask controllers every X frames for an updated action:
-      controllerFrameInterval: 5, // 50 FPS / 5 = 10 times per second
+      controllerFrameInterval: 5, // 25 FPS / 5 = 5 times per second
 
       // How fast the paddles and the ball can move
       paddleSpeed: 1,
@@ -234,7 +231,7 @@ export default class Match {
   // Call periodically. Will update the state and draw every few frames
   async updateAndDraw() {
     await this.update();
-    if (this.currentFrame % this.drawFrequency === 0 || this.winner) this.draw();
+    this.draw();
   }
 
   // Starts the game and runs until completion.
