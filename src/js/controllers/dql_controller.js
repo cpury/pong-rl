@@ -101,17 +101,13 @@ export default class DQLController extends BaseController {
     // Fill "neutral" values with previous estimates:
     const stateExpectationsTensor = tf.tidy(() => {
       const states = tf.tensor(transitions.map(t => this.stateToArray(t.state, t.side)));
-      let stateExpectations = this.model.predict(states);
-      stateExpectations = tf.sub(stateExpectations, tf.mean(stateExpectations));
-      return stateExpectations;
+      return this.model.predict(states);
     });
 
     // Estimate Q values for resulting states:
     const newStateExpectationsTensor = tf.tidy(() => {
       const newStates = tf.tensor(transitions.map(t => this.stateToArray(t.newState, t.side)));
-      let newStateExpectations = this.model.predict(newStates);
-      newStateExpectations = tf.sub(newStateExpectations, tf.mean(newStateExpectations));
-      return newStateExpectations;
+      return this.model.predict(newStates);
     });
 
     // Wait for the computations to be done:
