@@ -10,6 +10,10 @@ export default class DQLController extends BaseController {
   constructor(leftOrRight, options) {
     options = {
       memoryCapacity: 2000,
+      trainingSetMinSize: 40,
+      trainingSetMaxSize: 400,
+      trainingEpochs: 1,
+      trainingIterations: 4,
       ...(options || {}),
     };
     options.modelOptions = {
@@ -41,6 +45,7 @@ export default class DQLController extends BaseController {
       ...this.options,
       replayMemory: this.replayMemory,
       model: this.model,
+      trainingIterations: 0,
       ...(options || {}),
     };
     return new this.constructor(leftOrRight, options);
@@ -154,10 +159,40 @@ export default class DQLController extends BaseController {
     return action;
   }
 
+  // Train the model
+  async trainModel() {
+    // Training set should not be bigger than our replay memory:
+    const trainingSetSize = Math.round(
+      Math.min(this.replayMemory.memory.length, this.trainingSetMaxSize),
+    );
+
+    // Let's not train if we didn't collect enough examples yet:
+    if (trainingSetSize < this.trainingSetMinSize) return;
+
+    // Train the model
+    return new Promise((resolve, reject) => {
+      const trainingSet = this.replayMemory.sample(trainingSetSize);
+
+      Promise.all([this.transitionsToX(trainingSet), this.transitionsToY(trainingSet)]).then(
+        ([x, y]) => {
+          this.model
+            .fit(x, y, { epochs: this.trainingEpochs })
+            .then(resolve)
+            .catch(reject)
+            .finally(() => {
+              // Clear tensors from memory:
+              tf.dispose([x, y]);
+            });
+        },
+      );
+    });
+  }
+
   async onMatchEnd(won) {
     this.previousState = null;
     this.previousAction = null;
 
-    // TODO Train
+    // Train model a few times since the default values get updated in each step
+    for (let i = 0; i < this.trainingIterations; i++) await this.trainModel();
   }
 }
