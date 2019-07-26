@@ -14,6 +14,10 @@ export default class DQLController extends BaseController {
       trainingSetMaxSize: 400,
       trainingEpochs: 1,
       trainingIterations: 4,
+      lr: 0.01,
+      lrDecay: 0.93,
+      explorationRate: 0.4,
+      explorationRateDecay: 0.93,
       ...(options || {}),
     };
     options.modelOptions = {
@@ -151,7 +155,16 @@ export default class DQLController extends BaseController {
     }
 
     // Let the model pick the next action
-    const action = await this.model.sampleAction(this.stateToArray(state), 1);
+    let action = 0;
+
+    if (Math.random() < this.explorationRate) {
+      // Random action:
+      if (Math.random() < 0.5) action = -1;
+      else action = 1;
+    } else {
+      // Sample from model predictions:
+      action = await this.model.sampleAction(this.stateToArray(state), 1);
+    }
 
     this.previousState = state;
     this.previousAction = action;
@@ -194,5 +207,9 @@ export default class DQLController extends BaseController {
 
     // Train model a few times since the default values get updated in each step
     for (let i = 0; i < this.trainingIterations; i++) await this.trainModel();
+
+    // Decay learning and exploration rates:
+    this.lr *= this.lrDecay;
+    this.explorationRate != this.explorationRateDecay;
   }
 }
