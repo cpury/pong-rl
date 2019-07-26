@@ -184,27 +184,25 @@ export default class Match {
 
     // Check if match ended:
     const winner = this.currentState.winner;
-    if (winner) {
-      this.winner = winner;
-    } else {
-      // Ask controllers for action based on current state.
-      // Either every few frames or if there's a winner (to give them a chance to register the win)
-      let leftAction = this.leftPaddle.lastAction || 0;
-      let rightAction = this.rightPaddle.lastAction || 0;
+    if (winner) this.winner = winner;
 
-      if (this.currentState.winner || this.currentFrame % this.controllerFrameInterval === 0) {
-        if (this.leftController)
-          leftAction = await this.leftController.selectAction(this.currentState);
-        if (this.rightController)
-          rightAction = await this.rightController.selectAction(this.currentState);
-      }
+    // Ask controllers for action based on current state.
+    // Either every few frames or if there's a winner (to give them a chance to register the win)
+    let leftAction = this.leftPaddle.lastAction || 0;
+    let rightAction = this.rightPaddle.lastAction || 0;
 
-      this.leftPaddle.forceY = leftAction * this.paddleSpeed;
-      this.rightPaddle.forceY = rightAction * this.paddleSpeed;
-
-      this.leftPaddle.lastAction = leftAction;
-      this.rightPaddle.lastAction = rightAction;
+    if (this.currentState.winner || this.currentFrame % this.controllerFrameInterval === 0) {
+      if (this.leftController)
+        leftAction = await this.leftController.selectAction(this.currentState);
+      if (this.rightController)
+        rightAction = await this.rightController.selectAction(this.currentState);
     }
+
+    this.leftPaddle.forceY = leftAction * this.paddleSpeed;
+    this.rightPaddle.forceY = rightAction * this.paddleSpeed;
+
+    this.leftPaddle.lastAction = leftAction;
+    this.rightPaddle.lastAction = rightAction;
 
     // Update each object:
     this.moveObject(this.leftPaddle, this.timeFactor);
@@ -241,27 +239,38 @@ export default class Match {
 
   // Starts the game and runs until completion.
   async run() {
+    let updateInProgress = false;
+
     return new Promise((resolve, reject) => {
       this.leftController && this.leftController.onMatchStart();
       this.rightController && this.rightController.onMatchStart();
 
       const updateInterval = setInterval(() => {
+        if (updateInProgress) return;
+
         let error = null;
+        updateInProgress = true;
 
-        try {
-          this.updateAndDraw();
-        } catch (e) {
-          error = e;
-          console.error(error);
-        }
-        if (error || this.winner) {
-          clearInterval(updateInterval);
-          this.leftController && this.leftController.onMatchEnd(this.winner === 'left');
-          this.rightController && this.rightController.onMatchEnd(this.winner === 'right');
-
-          if (error) reject(error);
-          else resolve(this.winner);
-        }
+        this.updateAndDraw()
+          .then(() => {
+            updateInProgress = false;
+          })
+          .catch(e => {
+            error = e;
+            console.error(e);
+          })
+          .finally(() => {
+            if (error) {
+              clearInterval(updateInterval);
+              reject(error);
+            } else if (this.winner) {
+              clearInterval(updateInterval);
+              Promise.all([
+                this.leftController && this.leftController.onMatchEnd(this.winner === 'left'),
+                this.rightController && this.rightController.onMatchEnd(this.winner === 'right'),
+              ]).then(() => resolve(this.winner));
+            }
+          });
       }, this.updateFrequency);
     });
   }
