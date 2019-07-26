@@ -9,6 +9,7 @@ import DenseDQN from './dense_dqn';
 export default class DQLController extends BaseController {
   constructor(leftOrRight, options) {
     options = {
+      gamma: 0.95,
       memoryCapacity: 2000,
       trainingSetMinSize: 40,
       trainingSetMaxSize: 400,
@@ -130,10 +131,8 @@ export default class DQLController extends BaseController {
       expectedStateActionValues[i] = stateExpectations[i];
       const actionIndex = [-1, 0, 1].indexOf(transition.action);
       const nextStateQ = winner ? 0 : Math.max(...newStateExpectations[i]);
-      expectedStateActionValues[i][actionIndex] = Math.max(
-        -1,
-        Math.min(directReward + nextStateQ, 1),
-      );
+      const target = directReward + this.gamma * nextStateQ;
+      expectedStateActionValues[i][actionIndex] = Math.max(-1, Math.min(target, 1));
     }
 
     return tf.tensor(expectedStateActionValues);
