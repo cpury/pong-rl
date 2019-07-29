@@ -1,12 +1,14 @@
 import '../scss/style.scss';
 
-import Menu from './menu.js';
-import Match from './match.js';
+import Menu from './menu';
+import Match from './match';
 
-import DumbController from './controllers/dumb_controller.js';
-import DQLController from './controllers/dql_controller.js';
+import KeyController from './controllers/key_controller';
+import DumbController from './controllers/dumb_controller';
+import DQLController from './controllers/dql_controller';
 
 const controllers = {
+  KeyController,
   DumbController,
   DQLController,
 };
