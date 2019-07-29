@@ -6,30 +6,31 @@ import BaseController from '../base_controller';
 import ReplayMemory from './replay_memory';
 import DenseDQN from './dense_dqn';
 
+import _ from 'lodash';
+
 export default class DQLController extends BaseController {
   constructor(leftOrRight, options) {
     options = {
-      gamma: 0.95,
-      memoryCapacity: 2000,
+      gamma: 0.99,
       trainingSetMinSize: 40,
       trainingSetMaxSize: 400,
       trainingEpochs: 1,
       trainingIterations: 4,
-      lr: 0.01,
-      lrDecay: 0.93,
-      explorationRate: 0.4,
-      explorationRateDecay: 0.93,
+      lr: 0.001,
+      lrDecay: 0.99,
+      epsilonInit: 0.5,
+      epsilonDecay: 0.97,
       ...(options || {}),
     };
     options.modelOptions = {
       nInputs: 6,
       nHiddenLayers: 3,
-      nHiddenUnits: 40,
+      nHiddenUnits: 100,
       dropout: 0.1,
       ...(options.dqnOptions || {}),
     };
     options.memoryOptions = {
-      capacity: 2000,
+      capacity: 4000,
       ...(options.memoryOptions || {}),
     };
     super(leftOrRight, options);
@@ -152,7 +153,7 @@ export default class DQLController extends BaseController {
     // Let the model pick the next action
     let action = 0;
 
-    if (Math.random() < this.explorationRate) {
+    if (Math.random() < this.epsilon) {
       // Random action:
       if (Math.random() < 0.5) action = -1;
       else action = 1;
@@ -204,8 +205,8 @@ export default class DQLController extends BaseController {
     this.model.setLearningRate(this.lr);
     for (let i = 0; i < this.trainingIterations; i++) await this.trainModel();
 
-    // Decay learning and exploration rates:
+    // Decay learning rate and epsilon:
     this.lr *= this.lrDecay;
-    this.explorationRate != this.explorationRateDecay;
+    this.epsilon *= this.epsilonDecay;
   }
 }

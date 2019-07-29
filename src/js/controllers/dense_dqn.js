@@ -7,10 +7,11 @@ export default class DenseDQN {
     options = {
       nInputs: 6,
       nHiddenLayers: 2,
-      nHiddenUnits: 20,
+      nHiddenUnits: 100,
       hiddenActivation: 'relu',
       dropout: 0.2,
       lr: 0.01,
+      batchSize: 80,
       ...(options || {}),
     };
     Object.assign(this, options);
@@ -56,7 +57,7 @@ export default class DenseDQN {
   async fit(x, y, options) {
     options = {
       epochs: 10,
-      batchSize: 80,
+      batchSize: this.batchSize,
       shuffle: true,
       callbacks: {
         onEpochEnd: async (epoch, logs) => {
