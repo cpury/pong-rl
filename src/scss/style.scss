@@ -85,6 +85,14 @@ body {
   }
 }
 
+#stats {
+  font-size: 18pt;
+
+  @media (min-width: $tablet) {
+    font-size: 20pt;
+  }
+}
+
 .animated.section {
   opacity: 0;
   pointer-events: none;

@@ -1,3 +1,5 @@
+// A global menu that runs before the game starts to select controllers etc.
+
 export default {
   // Pass a dictionary of controller classes that can be selected
   init(controllers) {

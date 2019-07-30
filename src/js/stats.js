@@ -1,0 +1,78 @@
+// A UI to keep track of some stats.
+
+// Moving average
+class MovingAverage {
+  constructor(length) {
+    this.buffer = [];
+    this.length = length;
+  }
+
+  push(x) {
+    this.buffer.push(x);
+    this.buffer = this.buffer.slice(0, this.length);
+  }
+
+  getAverage() {
+    if (this.buffer.length === 0) return 0;
+    return this.buffer.reduce((x, prev) => x + prev) / this.buffer.length;
+  }
+}
+
+function convertTimeToText(d, digits) {
+  return (d / 1000).toFixed(digits) + 's';
+}
+
+export default class Stats {
+  constructor(options) {
+    options = {
+      divId: 'stats',
+      movingAverageLength: 20,
+      frameUpdateInterval: 6,
+      ...options,
+    };
+
+    Object.assign(this, options);
+
+    this.$div = $(`#${this.divId}`);
+
+    this.stats = {
+      match: 0,
+      matchFrame: 0,
+      matchTime: 0,
+      wins: {
+        left: 0,
+        right: 0,
+      },
+      lastDurations: new MovingAverage(this.movingAverageLength),
+    };
+  }
+
+  // Updates the UI with the current stats
+  updateUi() {
+    this.$div.find('.stats-match').text(this.stats.match);
+    this.$div.find('.stats-time').text(convertTimeToText(this.stats.matchTime, 1));
+    this.$div
+      .find('.stats-match-duration')
+      .text(convertTimeToText(this.stats.lastDurations.getAverage(), 1));
+  }
+
+  // Call this to update the match time at every frame
+  onFrame(currentTime) {
+    this.stats.matchTime = currentTime;
+    this.stats.matchFrame += 1;
+
+    if (this.stats.matchFrame % this.frameUpdateInterval === 0) this.updateUi();
+  }
+
+  // Call at the end of each match with the winner and duration of the match.
+  // Will update the stats and UI.
+  onMatchEnd(winner, duration) {
+    this.stats.match += 1;
+    this.stats.wins[winner] += 1;
+    this.stats.lastDurations.push(duration);
+
+    this.updateUi();
+    this.stats.matchTime = 0;
+    this.stats.matchFrame = 0;
+  }
+}

@@ -207,6 +207,8 @@ export default class Match {
     this.moveObject(this.ball, this.timeFactor, true);
 
     this.currentFrame += 1;
+
+    this.stats && this.stats.onFrame(this.currentFrame * this.updateFrequency);
   }
 
   // Given an object with coordinates and size, draw it to the canvas
@@ -262,6 +264,8 @@ export default class Match {
               reject(error);
             } else if (this.winner) {
               clearInterval(updateInterval);
+              this.stats &&
+                this.stats.onMatchEnd(this.winner, this.currentFrame * this.updateFrequency);
               Promise.all([
                 this.leftController && this.leftController.onMatchEnd(this.winner === 'left'),
                 this.rightController && this.rightController.onMatchEnd(this.winner === 'right'),
