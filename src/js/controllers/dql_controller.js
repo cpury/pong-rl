@@ -19,7 +19,7 @@ export default class DQLController extends BaseController {
       lr: 0.001,
       lrDecay: 0.99,
       epsilonInit: 0.5,
-      epsilonDecay: 0.97,
+      epsilonDecay: 0.95,
       verbose: false,
       ...(options || {}),
     };
@@ -41,6 +41,7 @@ export default class DQLController extends BaseController {
 
     this.previousState = null;
     this.previousAction = null;
+    this.epsilon = this.epsilonInit;
   }
 
   // Create a mirrored controller of this controller for self-play.
@@ -160,7 +161,8 @@ export default class DQLController extends BaseController {
       else action = 1;
     } else {
       // Sample from model predictions:
-      action = await this.model.sampleAction(this.stateToArray(state), 1);
+      const temperature = 0.1 + 2 * this.epsilon;
+      action = await this.model.sampleAction(this.stateToArray(state), temperature);
     }
 
     this.previousState = state;
