@@ -13,6 +13,8 @@ export default class Match {
       // How fast the paddles and the ball can move
       paddleSpeed: 1,
       ballSpeed: 0.8,
+      ballSpeedIncrease: 1.005,
+      ballSpeedMax: 2,
 
       ...options,
     };
@@ -35,6 +37,7 @@ export default class Match {
       width: 0.0375,
       forceY: 0,
       previousAction: null,
+      speed: this.paddleSpeed,
     };
     this.rightPaddle = {
       x: 0.98,
@@ -43,6 +46,7 @@ export default class Match {
       width: 0.0375,
       forceY: 0,
       previousAction: null,
+      speed: this.paddleSpeed,
     };
     this.ball = {
       x: 0.5,
@@ -51,13 +55,14 @@ export default class Match {
       width: 0.0375,
       forceX: 0,
       forceY: 0,
+      speed: this.ballSpeed,
     };
 
     // Start the ball in a random direction.
     const forceX = 0.5 + Math.random() * 0.25;
     const forceY = 0.9 + Math.random() * 0.25;
-    this.ball.forceX = (Math.random() > 0.5 ? 1 : -1) * forceX * this.ballSpeed;
-    this.ball.forceY = (Math.random() > 0.5 ? 1 : -1) * forceY * this.ballSpeed;
+    this.ball.forceX = (Math.random() > 0.5 ? 1 : -1) * forceX;
+    this.ball.forceY = (Math.random() > 0.5 ? 1 : -1) * forceY;
 
     // Keep track of the last two game states
     this.currentState = this.getState();
@@ -74,8 +79,8 @@ export default class Match {
       ball: {
         x: this.ball.x,
         y: this.ball.y,
-        forceX: this.ball.forceX,
-        forceY: this.ball.forceY,
+        forceX: this.ball.forceX * this.ball.speed,
+        forceY: this.ball.forceY * this.ball.speed,
       },
       leftPaddle: {
         x: this.leftPaddle.x,
@@ -138,7 +143,7 @@ export default class Match {
   // updating the force values.
   moveObject(obj, timeFactor, isBall) {
     if (obj.forceX) {
-      obj.x += obj.forceX * timeFactor;
+      obj.x += obj.forceX * obj.speed * timeFactor;
 
       // A ball should bounce off paddles
       const sideToCheck = obj.forceX > 0 ? 'right' : 'left';
@@ -148,7 +153,7 @@ export default class Match {
     }
 
     if (obj.forceY) {
-      obj.y += obj.forceY * timeFactor;
+      obj.y += obj.forceY * obj.speed * timeFactor;
 
       const radiusY = obj.height / 2;
 
@@ -195,8 +200,8 @@ export default class Match {
         rightAction = await this.rightController.selectAction(this.currentState);
     }
 
-    this.leftPaddle.forceY = leftAction * this.paddleSpeed;
-    this.rightPaddle.forceY = rightAction * this.paddleSpeed;
+    this.leftPaddle.forceY = leftAction;
+    this.rightPaddle.forceY = rightAction;
 
     this.leftPaddle.lastAction = leftAction;
     this.rightPaddle.lastAction = rightAction;
@@ -205,6 +210,10 @@ export default class Match {
     this.moveObject(this.leftPaddle, this.timeFactor);
     this.moveObject(this.rightPaddle, this.timeFactor);
     this.moveObject(this.ball, this.timeFactor, true);
+
+    // Increase ball speed
+    this.ballSpeed = Math.min(this.ballSpeedMax, this.ballSpeed * this.ballSpeedIncrease);
+    this.ball.speed = this.ballSpeed;
 
     this.currentFrame += 1;
 
@@ -259,6 +268,7 @@ export default class Match {
             console.error(e);
           })
           .finally(() => {
+            // Check if the match is finished or there was an error
             if (error) {
               clearInterval(updateInterval);
               reject(error);

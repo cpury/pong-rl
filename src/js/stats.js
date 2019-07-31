@@ -27,7 +27,7 @@ export default class Stats {
     options = {
       divId: 'stats',
       movingAverageLength: 20,
-      frameUpdateInterval: 6,
+      frameUpdateInterval: 5,
       ...options,
     };
 
