@@ -5,8 +5,8 @@ import BaseController from '../base_controller.js';
 export default class DumbController extends BaseController {
   constructor(leftOrRight, options) {
     options = {
-      reactionTime: 4,
-      hiccupChance: 0.05,
+      reactionTime: 1,
+      hiccupChance: 0.1,
       ...(options || {}),
     };
     super(leftOrRight, options);
