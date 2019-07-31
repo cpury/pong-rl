@@ -20,6 +20,7 @@ export default class DQLController extends BaseController {
       lrDecay: 0.99,
       epsilonInit: 0.5,
       epsilonDecay: 0.97,
+      verbose: false,
       ...(options || {}),
     };
     options.modelOptions = {
@@ -184,6 +185,30 @@ export default class DQLController extends BaseController {
 
       Promise.all([this.transitionsToX(trainingSet), this.transitionsToY(trainingSet)]).then(
         ([x, y]) => {
+          if (this.verbose) {
+            const average = data => data.reduce((sum, value) => sum + value) / data.length;
+            const standardDeviation = values =>
+              Math.sqrt(average(values.map(value => (value - average(values)) ** 2)));
+
+            const p = this.model.predict(x, true);
+            const e = tf.abs(tf.sub(y, p));
+
+            const describe = x => {
+              return {
+                min: tf.min(x).arraySync(),
+                max: tf.max(x).arraySync(),
+                mean: tf.mean(x).arraySync(),
+                std: standardDeviation(_.flatten(x.arraySync())),
+              };
+            };
+
+            console.table({
+              y: describe(y),
+              p: describe(p),
+              e: describe(e),
+            });
+          }
+
           this.model
             .fit(x, y, { epochs: this.trainingEpochs })
             .then(resolve)
