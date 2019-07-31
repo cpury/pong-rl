@@ -30,6 +30,6 @@
   "scripts": {
     "clean": "rm dist/bundle.js",
     "start": "parcel src/index.html",
-    "build-prod": "parcel build src/index.html --no-source-maps --public-url '.'"
+    "build-prod": "rm -rf dist && parcel build src/index.html --no-source-maps --public-url '.'"
   }
 }
