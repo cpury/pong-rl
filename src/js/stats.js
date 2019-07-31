@@ -9,7 +9,7 @@ class MovingAverage {
 
   push(x) {
     this.buffer.push(x);
-    this.buffer = this.buffer.slice(0, this.length);
+    if (this.buffer.length > this.length) this.buffer.shift();
   }
 
   getAverage() {
