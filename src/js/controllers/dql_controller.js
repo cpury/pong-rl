@@ -31,7 +31,7 @@ export default class DQLController extends BaseController {
       ...(options.dqnOptions || {}),
     };
     options.memoryOptions = {
-      capacity: 4000,
+      capacity: 6000,
       ...(options.memoryOptions || {}),
     };
     super(leftOrRight, options);
