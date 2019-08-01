@@ -81,19 +81,19 @@ export default class Match {
   // a new Match object with.
   static createOptions(difficulty) {
     let q = 1;
-    if (difficulty === 2) q = 1.15;
-    if (difficulty === 3) q = 1.5;
+    if (difficulty === 2) q = 1.25;
+    if (difficulty === 3) q = 2;
     const nq = 1 / q;
 
-    let ballSpeedIncrease = 1.0001;
-    if (difficulty === 2) ballSpeedIncrease = 1.001;
-    if (difficulty === 3) ballSpeedIncrease = 1.01;
+    let ballSpeedIncrease = 1.000025;
+    if (difficulty === 2) ballSpeedIncrease = 1.00025;
+    if (difficulty === 3) ballSpeedIncrease = 1.0025;
 
     return {
       paddleHeight: 0.33 * nq,
       paddleSpeed: 1.25 * nq,
       ballSpeed: 0.8 * q,
-      ballSpeedMax: 1.5 * q,
+      ballSpeedMax: 1 * q,
       ballSpeedIncrease,
     };
   }
