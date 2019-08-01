@@ -23,7 +23,7 @@ Implements a Pong-like game as well as a controller interface to add arbitrary c
 ### Other features:
 
 - Three difficulty levels
-- Live mode: When disabled, learning happens without drawin or waiting for user
+- Live mode: When disabled, learning happens without drawing or waiting for user
 
 ### Technologies used:
 
@@ -33,7 +33,7 @@ Implements a Pong-like game as well as a controller interface to add arbitrary c
 
 ## Running locally
 
-First install dependencies:
+First, install dependencies:
 
 ```sh
 npm install
