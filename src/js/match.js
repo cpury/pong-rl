@@ -256,13 +256,17 @@ export default class Match {
   }
 
   // Redraw the game based on the current state
-  draw() {
+  async draw() {
     this.ctx.fillStyle = '#e5e5e6';
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawObject(this.ball);
     this.drawObject(this.leftPaddle);
     this.drawObject(this.rightPaddle);
+
+    return new Promise(resolve => {
+      window.requestAnimationFrame(resolve);
+    });
   }
 
   // Call periodically. Will update the state and draw every few frames
@@ -270,8 +274,10 @@ export default class Match {
     await this.update();
     // Only draw or update stats when live or once in a while:
     if (this.live || Math.random() < 0.01) {
-      this.draw();
-      this.stats && this.stats.onFrame(this.currentFrame * this.updateFrequency);
+      await Promise.all([
+        this.draw(),
+        this.stats && this.stats.onFrame(this.currentFrame * this.updateFrequency),
+      ]);
     }
   }
 
@@ -306,9 +312,9 @@ export default class Match {
               reject(error);
             } else if (this.winner) {
               clearInterval(updateInterval);
-              this.stats &&
-                this.stats.onMatchEnd(this.winner, this.currentFrame * this.updateFrequency);
               Promise.all([
+                this.stats &&
+                  this.stats.onMatchEnd(this.winner, this.currentFrame * this.updateFrequency),
                 this.live && sleep(250),
                 this.leftController && this.leftController.onMatchEnd(this.winner === 'left'),
                 this.rightController && this.rightController.onMatchEnd(this.winner === 'right'),

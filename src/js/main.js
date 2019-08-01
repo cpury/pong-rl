@@ -32,10 +32,10 @@ $(document).ready(async () => {
   matchOptions.stats = new Stats();
 
   for (;;) {
-    const match = new Match({
+    window.currentMatch = new Match({
       ...matchOptions,
       live: liveMode,
     });
-    await match.run();
+    await window.currentMatch.run();
   }
 });

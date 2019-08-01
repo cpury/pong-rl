@@ -48,31 +48,37 @@ export default class Stats {
   }
 
   // Updates the UI with the current stats
-  updateUi() {
+  async updateUi() {
     this.$div.find('.stats-match').text(this.stats.match);
     this.$div.find('.stats-time').text(convertTimeToText(this.stats.matchTime, 1));
     this.$div
       .find('.stats-match-duration')
       .text(convertTimeToText(this.stats.lastDurations.getAverage(), 1));
+
+    return new Promise(resolve => {
+      window.requestAnimationFrame(resolve);
+    });
   }
 
   // Call this to update the match time at every frame
-  onFrame(currentTime) {
+  async onFrame(currentTime) {
     this.stats.matchTime = currentTime;
     this.stats.matchFrame += 1;
 
-    if (this.stats.matchFrame % this.frameUpdateInterval === 0) this.updateUi();
+    if (this.stats.matchFrame % this.frameUpdateInterval === 0) {
+      return await this.updateUi();
+    }
   }
 
   // Call at the end of each match with the winner and duration of the match.
   // Will update the stats and UI.
-  onMatchEnd(winner, duration) {
+  async onMatchEnd(winner, duration) {
     this.stats.match += 1;
     this.stats.wins[winner] += 1;
     this.stats.lastDurations.push(duration);
     this.stats.matchTime = duration;
 
-    this.updateUi();
+    await this.updateUi();
     this.stats.matchTime = 0;
     this.stats.matchFrame = 0;
   }
