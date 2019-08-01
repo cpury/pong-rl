@@ -195,10 +195,10 @@ export default class Match {
     const ballWidth = this.ball.width / 2;
     const paddleWidth = this.leftPaddle.width / 2;
 
-    if (this.ball.x - ballWidth < this.leftPaddle.x - paddleWidth) {
+    if (this.ball.forceX < 0 && this.ball.x - ballWidth < this.leftPaddle.x - paddleWidth) {
       return 'right';
     }
-    if (this.ball.x + ballWidth > this.rightPaddle.x + paddleWidth) {
+    if (this.ball.forceX > 0 && this.ball.x + ballWidth > this.rightPaddle.x + paddleWidth) {
       return 'left';
     }
   }
