@@ -4,6 +4,8 @@ import Menu from './menu';
 import Match from './match';
 import Stats from './stats';
 
+import { sleep } from './util';
+
 import KeyController from './controllers/key_controller';
 import DumbController from './controllers/dumb_controller';
 import DQLController from './controllers/dql_controller';
@@ -13,13 +15,6 @@ const controllers = {
   DumbController,
   KeyController,
 };
-
-// Async sleep function :)
-async function sleep(ms) {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
-}
 
 $(document).ready(async () => {
   Menu.init(controllers);
@@ -34,6 +29,5 @@ $(document).ready(async () => {
   for (;;) {
     const match = new Match(matchOptions);
     await match.run();
-    await sleep(500);
   }
 });

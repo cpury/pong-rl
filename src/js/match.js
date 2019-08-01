@@ -1,4 +1,7 @@
 // Represents a single match. Updates and keeps the game state. Draws to a canvas.
+
+import { sleep } from './util';
+
 export default class Match {
   constructor(options) {
     options = {
@@ -277,6 +280,7 @@ export default class Match {
               this.stats &&
                 this.stats.onMatchEnd(this.winner, this.currentFrame * this.updateFrequency);
               Promise.all([
+                sleep(250),
                 this.leftController && this.leftController.onMatchEnd(this.winner === 'left'),
                 this.rightController && this.rightController.onMatchEnd(this.winner === 'right'),
               ]).then(() => resolve(this.winner));
