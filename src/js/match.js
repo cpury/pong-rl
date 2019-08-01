@@ -16,7 +16,7 @@ export default class Match {
       // How fast the paddles and the ball can move
       paddleSpeed: 1,
       ballSpeed: 0.8,
-      ballSpeedIncrease: 1.005,
+      ballSpeedIncrease: 1.001,
       ballSpeedMax: 2,
 
       ...options,
@@ -74,6 +74,27 @@ export default class Match {
     this.winner = null;
 
     this.draw();
+  }
+
+  // Given a difficulty level from 1 to 3, generates an options object to instantiate
+  // a new Match object with.
+  static createOptions(difficulty) {
+    let q = 1;
+    if (difficulty === 2) q = 1.15;
+    if (difficulty === 3) q = 1.5;
+    const nq = 1 / q;
+
+    let ballSpeedIncrease = 1.0001;
+    if (difficulty === 2) ballSpeedIncrease = 1.001;
+    if (difficulty === 3) ballSpeedIncrease = 1.01;
+
+    return {
+      paddleHeight: 0.33 * nq,
+      paddleSpeed: 1.25 * nq,
+      ballSpeed: 0.8 * q,
+      ballSpeedMax: 1.5 * q,
+      ballSpeedIncrease,
+    };
   }
 
   // Return the current state of the game.
