@@ -70,6 +70,7 @@ export default class Stats {
     this.stats.match += 1;
     this.stats.wins[winner] += 1;
     this.stats.lastDurations.push(duration);
+    this.stats.matchTime = duration;
 
     this.updateUi();
     this.stats.matchTime = 0;

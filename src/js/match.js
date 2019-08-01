@@ -8,6 +8,9 @@ export default class Match {
       paddleHeight: 0.25,
       canvasId: 'gameCanvas',
 
+      // If false, doesn't draw and goes as fast as possible
+      live: true,
+
       // How often the game should be updated / redrawn
       updateFrequency: 40, // = 25 FPS
       // Ask controllers every X frames for an updated action:
@@ -74,7 +77,7 @@ export default class Match {
     this.currentFrame = 0;
     this.winner = null;
 
-    this.draw();
+    this.live && this.draw();
   }
 
   // Given a difficulty level from 1 to 3, generates an options object to instantiate
@@ -241,8 +244,6 @@ export default class Match {
     this.ball.speed = this.ballSpeed;
 
     this.currentFrame += 1;
-
-    this.stats && this.stats.onFrame(this.currentFrame * this.updateFrequency);
   }
 
   // Given an object with coordinates and size, draw it to the canvas
@@ -267,12 +268,18 @@ export default class Match {
   // Call periodically. Will update the state and draw every few frames
   async updateAndDraw() {
     await this.update();
-    this.draw();
+    // Only draw or update stats when live or once in a while:
+    if (this.live || Math.random() < 0.01) {
+      this.draw();
+      this.stats && this.stats.onFrame(this.currentFrame * this.updateFrequency);
+    }
   }
 
   // Starts the game and runs until completion.
   async run() {
     let updateInProgress = false;
+
+    const updateFrequency = this.live ? this.updateFrequency : 1;
 
     return new Promise((resolve, reject) => {
       this.leftController && this.leftController.onMatchStart();
@@ -302,13 +309,13 @@ export default class Match {
               this.stats &&
                 this.stats.onMatchEnd(this.winner, this.currentFrame * this.updateFrequency);
               Promise.all([
-                sleep(250),
+                this.live && sleep(250),
                 this.leftController && this.leftController.onMatchEnd(this.winner === 'left'),
                 this.rightController && this.rightController.onMatchEnd(this.winner === 'right'),
               ]).then(() => resolve(this.winner));
             }
           });
-      }, this.updateFrequency);
+      }, updateFrequency);
     });
   }
 }

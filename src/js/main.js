@@ -19,6 +19,11 @@ const controllers = {
 $(document).ready(async () => {
   Menu.init(controllers);
   const matchOptions = await Menu.run();
+  let liveMode = true;
+
+  $('#liveDropdown').change(event => {
+    liveMode = event.currentTarget.value === 'Yes';
+  });
 
   await sleep(500);
   $('#menu').remove();
@@ -27,7 +32,10 @@ $(document).ready(async () => {
   matchOptions.stats = new Stats();
 
   for (;;) {
-    const match = new Match(matchOptions);
+    const match = new Match({
+      ...matchOptions,
+      live: liveMode,
+    });
     await match.run();
   }
 });
