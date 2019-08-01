@@ -64,8 +64,9 @@ export default class Match {
     // Start the ball in a random direction.
     const forceX = 0.5 + Math.random() * 0.25;
     const forceY = 0.9 + Math.random() * 0.25;
-    this.ball.forceX = (Math.random() > 0.5 ? 1 : -1) * forceX;
-    this.ball.forceY = (Math.random() > 0.5 ? 1 : -1) * forceY;
+    const norm = Math.sqrt(Math.pow(forceX, 2) + Math.pow(forceY, 2));
+    this.ball.forceX = ((Math.random() > 0.5 ? 1 : -1) * forceX) / norm;
+    this.ball.forceY = ((Math.random() > 0.5 ? 1 : -1) * forceY) / norm;
 
     // Keep track of the last two game states
     this.currentState = this.getState();
