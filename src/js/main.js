@@ -9,9 +9,9 @@ import DumbController from './controllers/dumb_controller';
 import DQLController from './controllers/dql_controller';
 
 const controllers = {
-  KeyController,
-  DumbController,
   DQLController,
+  DumbController,
+  KeyController,
 };
 
 // Async sleep function :)

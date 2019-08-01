@@ -31,6 +31,7 @@ export default {
         this.$playerB.removeAttr('disabled');
       }
     });
+    this.$selfPlay.change();
   },
 
   // Returns the controller class selected for player a.
