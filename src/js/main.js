@@ -9,9 +9,11 @@ import { sleep } from './util';
 import KeyController from './controllers/key_controller';
 import DumbController from './controllers/dumb_controller';
 import DQLController from './controllers/dql_controller';
+import VisualDQLController from './controllers/visual_dql_controller';
 
 const controllers = {
   DQLController,
+  VisualDQLController,
   DumbController,
   KeyController,
 };
