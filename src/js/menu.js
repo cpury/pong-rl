@@ -35,6 +35,16 @@ export default {
       }
     });
     this.$selfPlay.change();
+
+    // Listen to controller dropdown and to update self-play selection
+    this.$playerA.change(() => {
+      const isSelfPlay = this.$selfPlay.find(':selected').text() === 'Yes';
+
+      if (isSelfPlay) {
+        // Update player B accordingly
+        this.$playerB.val(this.$playerA.val());
+      }
+    });
   },
 
   // Returns the controller class selected for player a.
