@@ -315,7 +315,9 @@ export default class Match {
   // Redraw the game based on the current state
   async draw() {
     this.ctx.fillStyle = '#e5e5e6';
+    this.ctx.strokeStyle = '#e5e5e6';
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawObject(this.ball);
     this.drawObject(this.leftPaddle);
