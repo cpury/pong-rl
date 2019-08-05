@@ -22,6 +22,9 @@ export default class Match {
       ballSpeedIncrease: 1.001,
       ballSpeedMax: 2,
 
+      // How strongly the image is downscaled for visual controllers
+      visualDownscalingFactor: 10,
+
       ...options,
     };
 
@@ -64,6 +67,9 @@ export default class Match {
       speed: this.ballSpeed,
     };
 
+    // If any of the controllers require a visual state, this whole class needs to keep track of it
+    this.isVisual = this.leftController.isVisual || this.rightController.isVisual;
+
     // Start the ball in a random direction.
     const forceX = 0.5 + Math.random() * 0.25;
     const forceY = 0.9 + Math.random() * 0.25;
@@ -101,9 +107,52 @@ export default class Match {
     };
   }
 
+  // Takes a snapshot of the game canvas.
+  // Returns a 2D array of values in [0, 1] describing the current visual state of the game.
+  // Optionally pass a factor by which it should be scaled down, e.g. 2 to halve the size.
+  getImageData(downscalingFactor) {
+    downscalingFactor = downscalingFactor || this.visualDownscalingFactor;
+    const downscaledCubeSize = downscalingFactor * downscalingFactor;
+    const width = this.canvas.width;
+    const height = this.canvas.height;
+
+    // This gets the raw RGB data. Still needs to be converted to grayscale and scaled.
+    const rawData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+
+    // Create an array full of zeros for the output
+    const data = new Array(width / downscalingFactor);
+    for (let i = 0; i < width / downscalingFactor; i++) {
+      data[i] = new Array(height / downscalingFactor);
+      data[i].fill(0);
+    }
+
+    // Go through each pixel in the raw data and set the corresponding pixel in the output data
+    let x = 0;
+    let y = 0;
+    for (let i = 0; i < rawData.data.length; i += 4) {
+      const r = rawData.data[i];
+      const g = rawData.data[i + 1];
+      const b = rawData.data[i + 2];
+      const a = rawData.data[i + 3];
+      const targetX = Math.floor(x / downscalingFactor);
+      const targetY = Math.floor(y / downscalingFactor);
+      const value = (Math.max(r, g, b) / 255) * (a / 255);
+
+      data[targetX][targetY] += value / downscaledCubeSize;
+
+      x += 1;
+      if (x >= width) {
+        x = 0;
+        y += 1;
+      }
+    }
+
+    return data;
+  }
+
   // Return the current state of the game.
   getState() {
-    return {
+    const state = {
       ball: {
         x: this.ball.x,
         y: this.ball.y,
@@ -121,6 +170,14 @@ export default class Match {
       winner: this.getWinner(),
       timePassed: this.currentFrame * this.timeFactor,
     };
+
+    if (this.isVisual) {
+      // Add image data to state.
+      state.imageData = this.getImageData();
+      state.previousImageData = this.previousState && this.previousState.imageData;
+    }
+
+    return state;
   }
 
   // Check if the given side's paddle is colliding with the ball.

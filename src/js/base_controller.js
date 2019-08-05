@@ -6,6 +6,9 @@ export default class BaseController {
     this.leftOrRight = leftOrRight;
     this.options = options;
     Object.assign(this, options);
+
+    // Set this to true if you require image information in your states
+    this.isVisual = false;
   }
 
   // Create a mirrored controller of this controller for self-play.
