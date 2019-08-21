@@ -245,7 +245,7 @@ export default class Match {
       // When hitting a wall, a paddle stops, a ball bounces back:
       if (!isBall) {
         obj.y = Math.max(radiusY, Math.min(1 - radiusY, obj.y));
-      } else if (obj.y < radiusY || obj.y > 1 - radiusY) {
+      } else if ((obj.forceY < 0 && obj.y < radiusY) || (obj.forceY > 0 && obj.y > 1 - radiusY)) {
         obj.forceY = -obj.forceY;
       }
     }
