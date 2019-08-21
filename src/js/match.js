@@ -14,7 +14,7 @@ export default class Match {
       // How often the game should be updated / redrawn
       updateFrequency: 40, // = 25 FPS
       // Ask controllers every X frames for an updated action:
-      controllerFrameInterval: 8, // 25 FPS / 8 = 3.125 updates per second
+      controllerFrameInterval: 5, // 25 FPS / 5 = 5 updates per second
 
       // How fast the paddles and the ball can move
       paddleSpeed: 1,
@@ -90,8 +90,8 @@ export default class Match {
   // a new Match object with.
   static createOptions(difficulty) {
     let q = 1;
-    if (difficulty === 2) q = 1.25;
-    if (difficulty === 3) q = 2;
+    if (difficulty === 2) q = 1.2;
+    if (difficulty === 3) q = 1.7;
     const nq = 1 / q;
 
     let ballSpeedIncrease = 1.000025;
@@ -99,9 +99,9 @@ export default class Match {
     if (difficulty === 3) ballSpeedIncrease = 1.0025;
 
     return {
-      paddleHeight: 0.33 * nq,
-      paddleSpeed: 1.25 * nq,
-      ballSpeed: 0.8 * q,
+      paddleHeight: 0.26 * nq,
+      paddleSpeed: 1.5 * nq,
+      ballSpeed: 0.7 * q,
       ballSpeedMax: 1 * q,
       ballSpeedIncrease,
     };
