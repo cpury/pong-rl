@@ -232,8 +232,20 @@ export default class Match {
 
       // A ball should bounce off paddles
       const sideToCheck = obj.forceX > 0 ? 'right' : 'left';
-      if (this.checkCollision(sideToCheck)) {
+      if (isBall && this.checkCollision(sideToCheck)) {
         obj.forceX = -obj.forceX;
+
+        // Add a spin to it:
+        const paddle = this[`${sideToCheck}Paddle`];
+        if (paddle.forceY !== 0) {
+          obj.forceY = (obj.forceY + paddle.forceY) / 2;
+          // Make mean spins a little harder:
+          if (Math.abs(obj.forceY) < 0.33) obj.forceY *= 2;
+          // Re-normalize it:
+          const norm = Math.sqrt(Math.pow(obj.forceX, 2) + Math.pow(obj.forceY, 2));
+          obj.forceX /= norm;
+          obj.forceY /= norm;
+        }
       }
     }
 
