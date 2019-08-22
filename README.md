@@ -1,5 +1,9 @@
 # pong-rl
 
+<p align="center">
+  <img width="320" height="568" src="https://github.com/cpury/pong-rl/blob/master/screenshot.png?raw=true">
+</p>
+
 Reinforcement Learning with Pong in the browser via TensorFlow.js by @cpury 🚀
 
 Demo: https://cpury.github.io/pong-rl/ (select DQL-Controller with self-play and watch it learn the game in ~10 minutes!)
