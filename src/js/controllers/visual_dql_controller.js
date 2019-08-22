@@ -88,6 +88,10 @@ export default class VisualDQLController extends BaseController {
         previous = tf.zerosLike(imageData);
       }
 
+      // Subtract the previous image, multiplied by 0.5
+      // This makes sure some information about movement is included.
+      previous = tf.mul(previous, 0.5);
+
       imageData = tf.sub(imageData, previous);
 
       if (side === 'right') {
