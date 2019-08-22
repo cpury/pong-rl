@@ -19,7 +19,7 @@ export default class Match {
       // How fast the paddles and the ball can move
       paddleSpeed: 1,
       ballSpeed: 0.8,
-      ballSpeedIncrease: 1.001,
+      ballSpeedIncrease: 1.01,
       ballSpeedMax: 2,
 
       // How strongly the image is downscaled for visual controllers
@@ -94,15 +94,15 @@ export default class Match {
     if (difficulty === 3) q = 1.7;
     const nq = 1 / q;
 
-    let ballSpeedIncrease = 1.000025;
-    if (difficulty === 2) ballSpeedIncrease = 1.00025;
-    if (difficulty === 3) ballSpeedIncrease = 1.0025;
+    let ballSpeedIncrease = 1.05;
+    if (difficulty === 2) ballSpeedIncrease = 1.1;
+    if (difficulty === 3) ballSpeedIncrease = 1.2;
 
     return {
       paddleHeight: 0.26 * nq,
       paddleSpeed: 1.5 * nq,
       ballSpeed: 0.7 * q,
-      ballSpeedMax: 1 * q,
+      ballSpeedMax: 1.25 * q,
       ballSpeedIncrease,
     };
   }
@@ -225,11 +225,12 @@ export default class Match {
   }
 
   // Move the given object by its force, checking for collisions and potentially
-  // updating the force values.
+  // updating the force values. If the ball, returns whether it was hit by a paddle.
   moveObject(obj, timeFactor, isBall) {
     const radiusY = obj.height / 2;
     const minY = radiusY;
     const maxY = 1 - radiusY;
+    let wasHit = false;
 
     // If a paddle is already touching the wall, forceY should set to zero:
     if (!isBall && obj.forceY) {
@@ -245,6 +246,7 @@ export default class Match {
       const sideToCheck = obj.forceX > 0 ? 'right' : 'left';
       if (isBall && this.checkCollision(sideToCheck)) {
         obj.forceX = -obj.forceX;
+        wasHit = true;
 
         // Add a spin to it:
         const paddle = this[`${sideToCheck}Paddle`];
@@ -270,6 +272,8 @@ export default class Match {
         obj.forceY = -obj.forceY;
       }
     }
+
+    return wasHit;
   }
 
   // Checks if one side one won and returns 'left' or 'right' if so.
@@ -315,11 +319,13 @@ export default class Match {
     // Update each object:
     this.moveObject(this.leftPaddle, this.timeFactor);
     this.moveObject(this.rightPaddle, this.timeFactor);
-    this.moveObject(this.ball, this.timeFactor, true);
+    const ballWasHit = this.moveObject(this.ball, this.timeFactor, true);
 
-    // Increase ball speed
-    this.ballSpeed = Math.min(this.ballSpeedMax, this.ballSpeed * this.ballSpeedIncrease);
-    this.ball.speed = this.ballSpeed;
+    if (ballWasHit) {
+      // Increase ball speed
+      this.ballSpeed = Math.min(this.ballSpeedMax, this.ballSpeed * this.ballSpeedIncrease);
+      this.ball.speed = this.ballSpeed;
+    }
 
     this.currentFrame += 1;
   }
