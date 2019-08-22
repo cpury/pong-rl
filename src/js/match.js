@@ -227,6 +227,17 @@ export default class Match {
   // Move the given object by its force, checking for collisions and potentially
   // updating the force values.
   moveObject(obj, timeFactor, isBall) {
+    const radiusY = obj.height / 2;
+    const minY = radiusY;
+    const maxY = 1 - radiusY;
+
+    // If a paddle is already touching the wall, forceY should set to zero:
+    if (!isBall && obj.forceY) {
+      if ((obj.y === minY && obj.forceY < 0) || (obj.y === maxY && obj.forceY > 0)) {
+        obj.forceY = 0;
+      }
+    }
+
     if (obj.forceX) {
       obj.x += obj.forceX * obj.speed * timeFactor;
 
@@ -252,11 +263,9 @@ export default class Match {
     if (obj.forceY) {
       obj.y += obj.forceY * obj.speed * timeFactor;
 
-      const radiusY = obj.height / 2;
-
       // When hitting a wall, a paddle stops, a ball bounces back:
       if (!isBall) {
-        obj.y = Math.max(radiusY, Math.min(1 - radiusY, obj.y));
+        obj.y = Math.max(minY, Math.min(maxY, obj.y));
       } else if ((obj.forceY < 0 && obj.y < radiusY) || (obj.forceY > 0 && obj.y > 1 - radiusY)) {
         obj.forceY = -obj.forceY;
       }
