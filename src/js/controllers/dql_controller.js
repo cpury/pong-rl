@@ -17,9 +17,9 @@ export default class DQLController extends BaseController {
       trainingEpochs: 1,
       trainingIterations: 4,
       lr: 0.001,
-      lrDecay: 0.99,
+      lrDecay: 0.995,
       epsilonInit: 0.5,
-      epsilonDecay: 0.95,
+      epsilonDecay: 0.98,
       verbose: false,
       ...(options || {}),
     };
