@@ -21,8 +21,7 @@ Implements a Pong-like game as well as a controller interface to add arbitrary c
 - `KeyController` to controll via keyboard
 - `DumbController` a simple controller that just follows the ball with some hiccups
 - `DQLController` a first Deep-Q-Learning controller that learns on hard-coded features (position of the ball, force of the ball and positions of the paddles).
-
-**In progress:** Visual interface and `VisualDQLController` that learns from pixels.
+- `VisualDQLController` Deep-Q-Learning directly on the pixels. **SLOW!**
 
 ### Other features:
 
