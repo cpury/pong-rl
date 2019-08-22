@@ -113,11 +113,8 @@ export default class VisualDQLController extends BaseController {
     // Get the expected reward for each transition
     const expectedStateActionValues = Array(transitions.length);
 
-    // Fill "neutral" values with previous estimates:
-    const stateExpectationsTensor = tf.tidy(() => {
-      const states = tf.stack(transitions.map(t => this.stateToTensor(t.state, t.side)));
-      return this.model.predict(states);
-    });
+    // Pre-fill with "NaNs". We use -10 as a NaN value, which will be filtered out in the loss function.
+    const stateExpectationsTensor = tf.mul(tf.ones([transitions.length, 3]), -10);
 
     // Estimate Q values for resulting states:
     const newStateExpectationsTensor = tf.tidy(() => {

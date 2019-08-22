@@ -2,6 +2,19 @@
 
 import * as tf from '@tensorflow/tfjs';
 
+// Custom loss function that ignores NaN values.
+// Since AFAIK tfjs doesn't use null values, we simply choose everything below -5
+// to be masked.
+const maskedHuberLoss = (labels, predictions) =>
+  tf.tidy(() => {
+    const mask = tf.less(labels, -5);
+    const zeros = tf.zerosLike(labels);
+    const maskedLabels = tf.where(mask, zeros, labels);
+    const maskedPredictions = tf.where(mask, zeros, predictions);
+
+    return tf.losses.huberLoss(maskedLabels, maskedPredictions);
+  });
+
 export default class DenseDQN {
   constructor(options) {
     options = {
@@ -48,7 +61,7 @@ export default class DenseDQN {
         activation: 'tanh',
       }),
     );
-    this.model.compile({ loss: tf.losses.huberLoss, optimizer: tf.train.adam(this.lr) });
+    this.model.compile({ loss: maskedHuberLoss, optimizer: tf.train.adam(this.lr) });
 
     this.loss = null;
   }
@@ -109,6 +122,6 @@ export default class DenseDQN {
 
   setLearningRate(lr) {
     this.lr = lr;
-    this.model.compile({ loss: tf.losses.huberLoss, optimizer: tf.train.adam(lr) });
+    this.model.compile({ loss: maskedHuberLoss, optimizer: tf.train.adam(lr) });
   }
 }
