@@ -12,8 +12,8 @@ export default class VisualDQLController extends BaseController {
   constructor(leftOrRight, options) {
     options = {
       gamma: 0.99,
-      trainingSetMinSize: 40,
-      trainingSetMaxSize: 400,
+      trainingSetMinSize: 20,
+      trainingSetMaxSize: 200,
       trainingEpochs: 1,
       trainingIterations: 4,
       lr: 0.001,
@@ -36,7 +36,7 @@ export default class VisualDQLController extends BaseController {
       ...(options.dqnOptions || {}),
     };
     options.memoryOptions = {
-      capacity: 6000,
+      capacity: 3000,
       ...(options.memoryOptions || {}),
     };
     super(leftOrRight, options);
