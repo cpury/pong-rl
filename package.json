@@ -1,7 +1,8 @@
 {
   "name": "pong-rl",
   "version": "1.0.0",
-  "description": "",
+  "description": "Reinforcement Learning with Pong in the Browser via TensorFlow.js",
+  "repository": "github:cpury/pong-rl",
   "main": "index.js",
   "dependencies": {
     "@babel/runtime-corejs2": "^7.5.5",
